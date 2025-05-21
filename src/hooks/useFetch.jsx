@@ -6,7 +6,7 @@ export const useFetch = (endpoint, params = {}) => {
    const [error, setError] = useState(null);
    const [loading, setLoading] = useState(true);
 
-   useEffect(() => {
+   const fetchData = () => {
       setLoading(true);
       api.get(endpoint, { params })
          .then((res) => {
@@ -15,7 +15,11 @@ export const useFetch = (endpoint, params = {}) => {
          })
          .catch((err) => setError(err.response?.data || err.message))
          .finally(() => setLoading(false));
+   };
+
+   useEffect(() => {
+      fetchData();
    }, [endpoint, JSON.stringify(params)]);
 
-   return { data, error, loading };
+   return { data, error, loading, refetch: fetchData };
 };
